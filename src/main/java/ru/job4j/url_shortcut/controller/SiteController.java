@@ -5,9 +5,16 @@ import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import ru.job4j.url_shortcut.domain.Site;
+import ru.job4j.url_shortcut.domain.URL;
 import ru.job4j.url_shortcut.service.SiteService;
+import ru.job4j.url_shortcut.service.UrlService;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Optional;
 
 
 @RestController
@@ -17,18 +24,37 @@ public class SiteController {
 
     private final SiteService sites;
     private final ObjectMapper objectMapper;
+    private final UrlService urls;
 
     @PostMapping("/convert")
-    public ResponseEntity<Site> convert(@RequestBody Site site) {
-
-        if (login == null || password == null) {
-            throw new NullPointerException("Login and password mustn't be empty");
+    public void convert(@RequestBody URL url, HttpServletResponse response) throws IOException {
+        if (url.getUrl() == null) {
+            throw new NullPointerException("You sent an empty URL");
         }
-        return new ResponseEntity<>(
-                this.persons.save(person),
-                HttpStatus.CREATED
-        );
+        if (urls.findCodeByUrl(url.getUrl()).isEmpty()) {
+            response.setStatus(HttpStatus.CREATED.value());
+            response.setContentType("application/json");
+            String code = "TEST";
+            url.setCode(code);
+            response.getWriter().write(objectMapper.writeValueAsString(new HashMap<>() { {
+                put("code", url.getCode());
+            }}));
+            urls.save(url);
+        } else {
+            throw new IllegalArgumentException("This site is already in the base");
+        }
     }
 
-
+    @GetMapping("/redirect/{code}")
+    public ResponseEntity redirect(@PathVariable String code) {
+        Optional<URL> url = urls.findUrlByCode(code);
+        if (url.isEmpty()) {
+            throw new IllegalArgumentException("Your code is incorrect");
+        }
+        urls.incrementByCode(code);
+        var body =  url.get().getUrl();
+        return ResponseEntity.status(HttpStatus.FOUND)
+                .header("Status","HTTP CODE - 302 REDIRECT URL")
+                .body(body);
+    }
 }

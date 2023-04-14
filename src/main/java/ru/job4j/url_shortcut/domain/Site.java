@@ -17,5 +17,4 @@ public class Site {
     private String site;
     private String login;
     private String password;
-    private List<URL> urls;
 }

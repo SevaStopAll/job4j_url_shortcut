@@ -44,16 +44,28 @@ public class UserController {
         if (users.findBySite(siteName).isEmpty()) {
             response.setStatus(HttpStatus.CREATED.value());
             response.setContentType("application/json");
-            site.setLogin("TEST");
-            site.setPassword("TEST");
+            site.setLogin("TEST1");
+            site.setPassword("TEST1");
             response.getWriter().write(objectMapper.writeValueAsString(new HashMap<>() { {
+                put("registration", true);
                 put("login", site.getLogin());
                 put("password", site.getPassword());
             }}));
             site.setPassword(encoder.encode(site.getPassword()));
             users.save(site);
         } else {
-            throw new IllegalArgumentException("This site is already in the base");
+            response.setStatus(HttpStatus.CREATED.value());
+            response.setContentType("application/json");
+
+            site.setLogin(users.findBySite(siteName).get().getLogin());
+            site.setPassword("TEST1");
+            response.getWriter().write(objectMapper.writeValueAsString(new HashMap<>() { {
+                put("registration", false);
+                put("login", site.getLogin());
+                put("password", site.getPassword());
+            }}));
+            site.setPassword(encoder.encode(site.getPassword()));
+            users.update(site);
         }
     }
 
