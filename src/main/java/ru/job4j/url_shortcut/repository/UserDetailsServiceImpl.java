@@ -5,25 +5,25 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-import ru.job4j.auth.domain.Person;
-import ru.job4j.auth.repository.PersonRepository;
+import ru.job4j.url_shortcut.domain.Site;
+
 
 import static java.util.Collections.emptyList;
 
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService {
-    private PersonRepository users;
+    private SiteRepository sites;
 
-    public UserDetailsServiceImpl(PersonRepository users) {
-        this.users = users;
+    public UserDetailsServiceImpl(SiteRepository sites) {
+        this.sites = sites;
     }
 
     @Override
     public UserDetails loadUserByUsername(String login) throws UsernameNotFoundException {
-        Person user = users.findByLogin(login);
-        if (user == null) {
+        Site site = sites.findByLogin(login);
+        if (site == null) {
             throw new UsernameNotFoundException(login);
         }
-        return new User(user.getLogin(), user.getPassword(), emptyList());
+        return new User(site.getLogin(), site.getPassword(), emptyList());
     }
 }

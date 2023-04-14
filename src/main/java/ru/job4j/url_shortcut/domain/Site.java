@@ -6,6 +6,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import java.util.List;
 
 @Data
 @Entity
@@ -16,4 +17,5 @@ public class Site {
     private String site;
     private String login;
     private String password;
+    private List<URL> urls;
 }
