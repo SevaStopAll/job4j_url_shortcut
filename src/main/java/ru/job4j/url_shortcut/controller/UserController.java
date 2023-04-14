@@ -6,6 +6,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
+import ru.job4j.url_shortcut.utils.Generator;
 import ru.job4j.url_shortcut.domain.Site;
 import ru.job4j.url_shortcut.service.SiteService;
 
@@ -14,7 +15,6 @@ import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.io.IOException;
 import java.util.HashMap;
-import java.util.List;
 
 @RestController
 @RequestMapping("/users")
@@ -44,8 +44,8 @@ public class UserController {
         if (users.findBySite(siteName).isEmpty()) {
             response.setStatus(HttpStatus.CREATED.value());
             response.setContentType("application/json");
-            site.setLogin("TEST1");
-            site.setPassword("TEST1");
+            site.setLogin(Generator.generate());
+            site.setPassword(Generator.generate());
             response.getWriter().write(objectMapper.writeValueAsString(new HashMap<>() { {
                 put("registration", true);
                 put("login", site.getLogin());
@@ -58,7 +58,7 @@ public class UserController {
             response.setContentType("application/json");
 
             site.setLogin(users.findBySite(siteName).get().getLogin());
-            site.setPassword("TEST1");
+            site.setPassword(Generator.generate());
             response.getWriter().write(objectMapper.writeValueAsString(new HashMap<>() { {
                 put("registration", false);
                 put("login", site.getLogin());

@@ -1,4 +1,4 @@
-package ru.job4j.url_shortcut;
+package ru.job4j.url_shortcut.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpMethod;
@@ -13,7 +13,7 @@ import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import ru.job4j.url_shortcut.repository.UserDetailsServiceImpl;
 
-import static ru.job4j.url_shortcut.JWTAuthenticationFilter.SIGN_UP_URL;
+import static ru.job4j.url_shortcut.security.JWTAuthenticationFilter.SIGN_UP_URL;
 
 @EnableWebSecurity
 public class WebSecurity extends WebSecurityConfigurerAdapter {

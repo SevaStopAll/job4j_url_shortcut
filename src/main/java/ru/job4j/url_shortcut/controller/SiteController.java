@@ -5,13 +5,11 @@ import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import ru.job4j.url_shortcut.domain.Site;
+import ru.job4j.url_shortcut.utils.Generator;
 import ru.job4j.url_shortcut.domain.URL;
-import ru.job4j.url_shortcut.service.SiteService;
 import ru.job4j.url_shortcut.service.UrlService;
 
 import javax.servlet.http.HttpServletResponse;
-import javax.validation.Valid;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Optional;
@@ -21,8 +19,6 @@ import java.util.Optional;
 @AllArgsConstructor
 @RequestMapping("/sites")
 public class SiteController {
-
-    private final SiteService sites;
     private final ObjectMapper objectMapper;
     private final UrlService urls;
 
@@ -34,7 +30,7 @@ public class SiteController {
         if (urls.findCodeByUrl(url.getUrl()).isEmpty()) {
             response.setStatus(HttpStatus.CREATED.value());
             response.setContentType("application/json");
-            String code = "TEST";
+            String code = Generator.generate();
             url.setCode(code);
             response.getWriter().write(objectMapper.writeValueAsString(new HashMap<>() { {
                 put("code", url.getCode());

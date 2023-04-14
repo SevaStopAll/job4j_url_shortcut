@@ -1,4 +1,4 @@
-package ru.job4j.url_shortcut;
+package ru.job4j.url_shortcut.security;
 
 import com.auth0.jwt.JWT;
 import com.fasterxml.jackson.databind.ObjectMapper;
