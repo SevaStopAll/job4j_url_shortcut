@@ -1,4 +1,4 @@
-package ru.job4j.url_shortcut.handlers;
+package ru.job4j.shortcut.handlers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;

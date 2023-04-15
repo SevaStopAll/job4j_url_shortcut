@@ -1,12 +1,12 @@
-package ru.job4j.url_shortcut.utils;
+package ru.job4j.shortcut.utils;
 
 import java.util.Random;
 
 public class Generator {
     public static String generate() {
-        int leftLimit = 48;
+        int leftLimit = 97;
         int rightLimit = 122;
-        int targetStringLength = 10;
+        int targetStringLength = 8;
         Random random = new Random();
 
         String generatedString = random.ints(leftLimit, rightLimit + 1)
@@ -14,9 +14,5 @@ public class Generator {
                 .collect(StringBuilder::new, StringBuilder::appendCodePoint, StringBuilder::append)
                 .toString();
         return generatedString;
-    }
-
-    public static void main(String[] args) {
-        System.out.println(Generator.generate());
     }
 }

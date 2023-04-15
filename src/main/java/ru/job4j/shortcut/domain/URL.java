@@ -1,4 +1,4 @@
-package ru.job4j.url_shortcut.domain;
+package ru.job4j.shortcut.domain;
 
 import lombok.Data;
 

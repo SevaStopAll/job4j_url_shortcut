@@ -1,4 +1,4 @@
-package ru.job4j.url_shortcut.domain;
+package ru.job4j.shortcut.domain;
 
 import lombok.Data;
 
@@ -6,7 +6,6 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import java.util.List;
 
 @Data
 @Entity

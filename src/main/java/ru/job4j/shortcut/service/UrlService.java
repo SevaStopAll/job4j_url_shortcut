@@ -1,12 +1,14 @@
-package ru.job4j.url_shortcut.service;
+package ru.job4j.shortcut.service;
 
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.job4j.url_shortcut.domain.Site;
-import ru.job4j.url_shortcut.domain.URL;
-import ru.job4j.url_shortcut.repository.UrlRepository;
+import ru.job4j.shortcut.domain.URL;
+import ru.job4j.shortcut.repository.UrlRepository;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Service
@@ -26,7 +28,19 @@ public class UrlService {
     public void incrementByCode(String code) {
         urls.incrementByCode(code);
     }
+
     public Optional<URL> save(URL url) {
         return Optional.of(urls.save(url));
     }
+
+    public Map<?, ?> mapBuUrlCount(List<URL> list) {
+        var map = new HashMap<>();
+        list.forEach(p -> map.put(p.getUrl(), p.getCount()));
+        return map;
+    }
+
+    public List<URL> findAll() {
+        return urls.findAll();
+    }
+
 }

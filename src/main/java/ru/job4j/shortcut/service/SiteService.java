@@ -1,9 +1,10 @@
-package ru.job4j.url_shortcut.service;
+package ru.job4j.shortcut.service;
 
+import com.google.gson.Gson;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
-import ru.job4j.url_shortcut.domain.Site;
-import ru.job4j.url_shortcut.repository.SiteRepository;
+import ru.job4j.shortcut.domain.Site;
+import ru.job4j.shortcut.repository.SiteRepository;
 
 import javax.transaction.Transactional;
 import java.util.Optional;
@@ -23,12 +24,16 @@ public class SiteService {
 
     @Transactional
     public boolean update(Site site) {
-        if (sites.findById(site.getId()).isPresent()) {
+        if (sites.findBySite(site.getSite()) != null) {
             sites.save(site);
             return true;
         }
         return false;
     }
 
+    public <T> String toJson(T object) {
+        var gson = new Gson();
+        return gson.toJson(object);
+    }
 
 }
