@@ -30,16 +30,20 @@
 
     2. После авторизации (и получения токена) пользователь сможет зарегистрировать сайт по URL и получить уникальный код.
     
-    ![image](https://user-images.githubusercontent.com/115623776/232193684-9a1f518f-080b-45d1-b29e-062f5d81b874.png)
+    
+![image](https://user-images.githubusercontent.com/115623776/232193804-ad28023f-c4df-4a9d-958e-986e2a430987.png)
+
 
     
     3. При отправке кода в ответ пользователь (даже не зарегистрированный) получит обратно URL, привязанный к коду.
     
-    ![image](https://user-images.githubusercontent.com/115623776/232193703-5bf0ddd0-14e7-4452-9bfe-045d419b47ab.png)
+![image](https://user-images.githubusercontent.com/115623776/232193826-eeebb74c-a407-4e7c-afcc-59a72b61d3c5.png)
+
 
 
     4. Также пользователь может получить статистику по частоте запроса сайтов по кодам. 
-    ![image](https://user-images.githubusercontent.com/115623776/232193739-bd6092ab-2ca6-40ee-9f1a-8f41902aafe7.png)
+
+![image](https://user-images.githubusercontent.com/115623776/232193830-4e5b17d8-7c6e-4d87-a9ad-36b370de0542.png)
 
 
 ## Контакты.
