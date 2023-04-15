@@ -20,6 +20,8 @@
 
 - **Java 17**
 - **Spring Boot 2.7.10**
+- **Spring Data**
+- **Spring Security**
 - **PostgreSQL 14**
 - **lombok**
 
