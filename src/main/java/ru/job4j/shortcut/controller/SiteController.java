@@ -36,7 +36,7 @@ public class SiteController {
     private static final Logger LOGGER = LoggerFactory.getLogger(SiteController.class.getSimpleName());
 
     @PostMapping("/registration")
-    public ResponseEntity<String> signUp(@Valid @RequestBody Site site, HttpServletResponse response) throws IOException {
+    public ResponseEntity<String> signUp(@Valid @RequestBody Site site) {
         var siteName = site.getSite();
         if (siteName == null) {
             throw new NullPointerException("Sitename mustn't be empty");

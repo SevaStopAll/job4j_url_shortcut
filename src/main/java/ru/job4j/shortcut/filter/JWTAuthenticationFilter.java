@@ -1,4 +1,4 @@
-package ru.job4j.shortcut.security;
+package ru.job4j.shortcut.filter;
 
 import com.auth0.jwt.JWT;
 import com.fasterxml.jackson.databind.ObjectMapper;
