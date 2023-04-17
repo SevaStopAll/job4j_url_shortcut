@@ -1,4 +1,4 @@
-package ru.job4j.shortcut;
+package ru.job4j.shortcut.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

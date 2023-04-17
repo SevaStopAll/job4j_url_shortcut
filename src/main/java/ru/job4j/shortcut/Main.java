@@ -14,11 +14,4 @@ public class Main {
         SpringApplication.run(Main.class, args);
     }
 
-    @Bean
-    public SpringLiquibase liquibase(DataSource ds) {
-        SpringLiquibase liquibase = new SpringLiquibase();
-        liquibase.setChangeLog("classpath:db.changeLog.xml");
-        liquibase.setDataSource(ds);
-        return liquibase;
-    }
 }
