@@ -34,53 +34,53 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 class SiteControllerTest {
 
-        @MockBean
-        private SiteService sites;
+    @MockBean
+    private SiteService sites;
 
-        @MockBean
-        private UrlService urls;
+    @MockBean
+    private UrlService urls;
 
-        @Autowired
-        private MockMvc mockMvc;
+    @Autowired
+    private MockMvc mockMvc;
 
-        @Test
-        @WithMockUser
-        public void whenSignUp() throws Exception {
-            var body = new HashMap<>() {{
-                put("site", "test.ru");
-            }};
-            var om = new ObjectMapper().writeValueAsString(body);
-            this.mockMvc.perform(post("/sites/registration")
-                            .contentType(MediaType.APPLICATION_JSON)
-                            .content(om))
-                    .andDo(print())
-                    .andExpect(status().isCreated());
-            ArgumentCaptor<Site> argument = ArgumentCaptor.forClass(Site.class);
-            verify(sites).save(argument.capture());
-            assertThat(argument.getValue().getSite()).isEqualTo("test.ru");
-        }
+    @Test
+    @WithMockUser
+    public void whenSignUp() throws Exception {
+        var body = new HashMap<>() {{
+            put("site", "test.ru");
+        }};
+        var om = new ObjectMapper().writeValueAsString(body);
+        this.mockMvc.perform(post("/sites/registration")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(om))
+                .andDo(print())
+                .andExpect(status().isCreated());
+        ArgumentCaptor<Site> argument = ArgumentCaptor.forClass(Site.class);
+        verify(sites).save(argument.capture());
+        assertThat(argument.getValue().getSite()).isEqualTo("test.ru");
+    }
 
-        @Test
-        @WithMockUser
-        public void whenConvert() throws Exception {
-            var body = new HashMap<>() {{
-                put("url", "test.ru");
-            }};
-            var om = new ObjectMapper().writeValueAsString(body);
-            this.mockMvc.perform(post("/sites/convert")
-                            .contentType(MediaType.APPLICATION_JSON)
-                            .content(om))
-                    .andDo(print())
-                    .andExpect(status().isCreated());
-            ArgumentCaptor<URL> argument = ArgumentCaptor.forClass(URL.class);
-            verify(urls).save(argument.capture());
-            assertThat(argument.getValue().getUrl()).isEqualTo("test.ru");
-        }
+    @Test
+    @WithMockUser
+    public void whenConvert() throws Exception {
+        var body = new HashMap<>() {{
+            put("url", "test.ru");
+        }};
+        var om = new ObjectMapper().writeValueAsString(body);
+        this.mockMvc.perform(post("/sites/convert")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(om))
+                .andDo(print())
+                .andExpect(status().isCreated());
+        ArgumentCaptor<URL> argument = ArgumentCaptor.forClass(URL.class);
+        verify(urls).save(argument.capture());
+        assertThat(argument.getValue().getUrl()).isEqualTo("test.ru");
+    }
 
     @Test
     @WithMockUser
     public void whenRedirectButNotFound() throws Exception {
-        when(urls.findAndIncrement("testCode")).thenReturn(false);
+        when(urls.findAndIncrement("testCode")).thenReturn(Optional.empty());
         this.mockMvc.perform(get("/sites/redirect/{code}", "testCode"))
                 .andDo(print())
                 .andExpect(status().isNotFound());
@@ -89,9 +89,10 @@ class SiteControllerTest {
     @Test
     @WithMockUser
     public void whenRedirect() throws Exception {
-            URL url = new URL();
-            url.setUrl("site.test");
-        when(urls.findAndIncrement("testCode")).thenReturn(true);
+        URL url = new URL();
+        url.setUrl("site.test");
+        url.setCode("testCode");
+        when(urls.findAndIncrement("testCode")).thenReturn(Optional.of(url));
         when(urls.findUrlByCode("testCode")).thenReturn(Optional.of(url));
         this.mockMvc.perform(get("/sites/redirect/{code}", "testCode"))
                 .andDo(print())

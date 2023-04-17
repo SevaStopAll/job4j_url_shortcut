@@ -83,12 +83,12 @@ public class SiteController {
 
     @GetMapping("/redirect/{code}")
     public ResponseEntity redirect(@PathVariable String code) {
-        if (!urls.findAndIncrement(code)) {
+        Optional<URL> optional = urls.findAndIncrement(code);
+        if (optional.isEmpty()) {
             return ResponseEntity
                     .status(HttpStatus.NOT_FOUND).build();
         }
-        Optional<URL> url = urls.findUrlByCode(code);
-        var body =  url.get().getUrl();
+        var body =  optional.get().getUrl();
         return ResponseEntity.status(HttpStatus.FOUND)
                 .header("Status", "HTTP CODE - 302 REDIRECT URL")
                 .body(body);

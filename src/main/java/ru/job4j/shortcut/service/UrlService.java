@@ -24,11 +24,6 @@ public class UrlService {
         return Optional.ofNullable(urls.findByCode(code));
     }
 
-    @Transactional
-    public void incrementByCode(String code) {
-        urls.incrementByCode(code);
-    }
-
     public Optional<URL> save(URL url) {
         return Optional.of(urls.save(url));
     }
@@ -44,12 +39,12 @@ public class UrlService {
     }
 
     @Transactional
-    public boolean findAndIncrement(String code) {
-        if (!findUrlByCode(code).isPresent()) {
-            return false;
+    public Optional<URL> findAndIncrement(String code) {
+        Optional<URL> optional = findUrlByCode(code);
+        if (optional.isPresent()) {
+            urls.incrementByCode(code);
         }
-        incrementByCode(code);
-        return true;
+        return optional;
     }
 
 }
