@@ -13,6 +13,7 @@ public class URL {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+    @Setter
     @Getter
     private String url;
     @Getter

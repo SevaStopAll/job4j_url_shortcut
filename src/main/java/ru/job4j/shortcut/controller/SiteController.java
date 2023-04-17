@@ -38,36 +38,32 @@ public class SiteController {
     @PostMapping("/registration")
     public ResponseEntity<String> signUp(@Valid @RequestBody Site site) {
         var siteName = site.getSite();
+        var body = new HashMap<>();
+        body.put("registration", false);
+        body.put("password", "");
+        body.put("login", "");
         if (siteName == null) {
             throw new NullPointerException("Sitename mustn't be empty");
         }
-        if (sites.findBySite(siteName).isEmpty()) {
+        if (!sites.findBySite(siteName).isEmpty()) {
+            return ResponseEntity
+                    .status(HttpStatus.CONFLICT)
+                    .contentType(MediaType.TEXT_PLAIN)
+                    .contentLength(body.toString().length())
+                    .body(body.toString());
+        }
             site.setLogin(Generator.generate());
             site.setPassword(Generator.generate());
-            var body = new HashMap<>() {{
-                put("registration", true);
-                put("password", site.getPassword());
-                put("login", site.getLogin());
-            }}.toString();
+            body.put("registration", true);
+            body.put("password", site.getPassword());
+            body.put("login", site.getLogin());
             site.setPassword(encoder.encode(site.getPassword()));
             sites.save(site);
             return ResponseEntity.
                     status(HttpStatus.CREATED)
                     .contentType(MediaType.TEXT_PLAIN)
-                    .contentLength(body.length())
-                    .body(body);
-        } else {
-            var body = new HashMap<>() {{
-                put("registration", false);
-                put("password", "");
-                put("login", "");
-            }}.toString();
-            return ResponseEntity
-                    .status(HttpStatus.CONFLICT)
-                    .contentType(MediaType.TEXT_PLAIN)
-                    .contentLength(body.length())
-                    .body(body);
-        }
+                    .contentLength(body.toString().length())
+                    .body(body.toString());
     }
 
     @PostMapping("/convert")
@@ -87,12 +83,11 @@ public class SiteController {
 
     @GetMapping("/redirect/{code}")
     public ResponseEntity redirect(@PathVariable String code) {
-        Optional<URL> url = urls.findUrlByCode(code);
-        if (url.isEmpty()) {
+        if (!urls.findAndIncrement(code)) {
             return ResponseEntity
                     .status(HttpStatus.NOT_FOUND).build();
         }
-        urls.incrementByCode(code);
+        Optional<URL> url = urls.findUrlByCode(code);
         var body =  url.get().getUrl();
         return ResponseEntity.status(HttpStatus.FOUND)
                 .header("Status", "HTTP CODE - 302 REDIRECT URL")
@@ -101,7 +96,6 @@ public class SiteController {
 
     @GetMapping("/statistic")
     public ResponseEntity<String> getStatistic() {
-
         var body = sites.toJson(urls.mapBuUrlCount(urls.findAll()));
         return ResponseEntity.status(HttpStatus.OK)
                 .header("Statistic", "Successful")

@@ -43,4 +43,15 @@ public class UrlService {
         return urls.findAll();
     }
 
+    @Transactional
+    public boolean findAndIncrement(String code) {
+        if (!findUrlByCode(code).isPresent()) {
+            return false;
+        }
+        incrementByCode(code);
+        return true;
+    }
+
 }
+
+
