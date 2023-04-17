@@ -21,9 +21,4 @@ public class Main {
         liquibase.setDataSource(ds);
         return liquibase;
     }
-
-    @Bean
-    public BCryptPasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
 }
