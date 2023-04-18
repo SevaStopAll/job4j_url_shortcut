@@ -8,12 +8,14 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import ru.job4j.shortcut.DTO.SiteDto;
 import ru.job4j.shortcut.domain.Site;
 import ru.job4j.shortcut.repository.SiteRepository;
 import ru.job4j.shortcut.utils.Generator;
 
 import javax.transaction.Transactional;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 
 import static java.util.Collections.emptyList;
@@ -56,18 +58,17 @@ public class SiteService implements UserDetailsService {
     }
 
     public HashMap setData(Site site)  {
-        var body = new HashMap<>();
-        body.put("registration", true);
         String login;
         do {login = Generator.generate(); } while (sites.findByLogin(login).isPresent());
-        var password = Generator.generate();
-        site.setPassword(password);
-        site.setLogin(login);
-        body.put("login", login);
-        body.put("password", password);
-        site.setPassword(encoder.encode(site.getPassword()));
+        var body = new SiteDto(login, Generator.generate(), true);
+        site.setLogin(body.getLogin());
+        site.setPassword(encoder.encode(body.getPassword()));
         sites.save(site);
-        return body;
+        return (HashMap) Map.of(
+                "registation", body.isRegistration(),
+                "country", body.getLogin(),
+                "city", body.getPassword()
+        );
     }
 
 }
