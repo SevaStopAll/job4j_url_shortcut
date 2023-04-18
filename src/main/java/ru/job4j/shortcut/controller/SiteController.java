@@ -31,8 +31,6 @@ public class SiteController {
 
     private final SiteService sites;
 
-    private BCryptPasswordEncoder encoder;
-
     private static final Logger LOGGER = LoggerFactory.getLogger(SiteController.class.getSimpleName());
 
     @PostMapping("/registration")
@@ -40,8 +38,8 @@ public class SiteController {
         var siteName = site.getSite();
         var body = new HashMap<>();
         body.put("registration", false);
-        body.put("password", "");
         body.put("login", "");
+        body.put("password", "");
         if (siteName == null) {
             throw new NullPointerException("Sitename mustn't be empty");
         }
@@ -52,13 +50,7 @@ public class SiteController {
                     .contentLength(body.toString().length())
                     .body(body.toString());
         }
-            site.setLogin(Generator.generate());
-            site.setPassword(Generator.generate());
-            body.put("registration", true);
-            body.put("password", site.getPassword());
-            body.put("login", site.getLogin());
-            site.setPassword(encoder.encode(site.getPassword()));
-            sites.save(site);
+            body = sites.setData(site);
             return ResponseEntity.
                     status(HttpStatus.CREATED)
                     .contentType(MediaType.TEXT_PLAIN)
@@ -68,11 +60,12 @@ public class SiteController {
 
     @PostMapping("/convert")
     public ResponseEntity<String> convert(@RequestBody URL url) {
-        var code = Generator.generate();
+        String code;
+        do {code = Generator.generate(); } while (urls.findUrlByCode(code).isPresent());
         url.setCode(code);
         urls.save(url);
         var body = new HashMap<>() {{
-            put("code", code);
+            put("code", url.getCode());
         }}.toString();
         return ResponseEntity
                 .status(HttpStatus.CREATED)

@@ -56,7 +56,7 @@ class SiteControllerTest {
                 .andDo(print())
                 .andExpect(status().isCreated());
         ArgumentCaptor<Site> argument = ArgumentCaptor.forClass(Site.class);
-        verify(sites).save(argument.capture());
+        verify(sites).setData(argument.capture());
         assertThat(argument.getValue().getSite()).isEqualTo("test.ru");
     }
 
