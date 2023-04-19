@@ -60,7 +60,8 @@ public class SiteService implements UserDetailsService {
     public HashMap setData(Site site)  {
         String login;
         do {
-            login = Generator.generate(); } while (sites.findByLogin(login).isPresent());
+            login = Generator.generate();
+        } while (sites.findByLogin(login).isPresent());
         var body = new SiteDto(login, Generator.generate(), true);
         site.setLogin(body.getLogin());
         site.setPassword(encoder.encode(body.getPassword()));

@@ -62,7 +62,8 @@ public class SiteController {
     public ResponseEntity<String> convert(@RequestBody URL url) {
         String code;
         do {
-            code = Generator.generate(); } while (urls.findUrlByCode(code).isPresent());
+            code = Generator.generate();
+        } while (urls.findUrlByCode(code).isPresent());
         url.setCode(code);
         urls.save(url);
         var body = new HashMap<>() {{
