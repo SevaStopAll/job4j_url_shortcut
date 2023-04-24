@@ -67,9 +67,9 @@ public class SiteService implements UserDetailsService {
         site.setPassword(encoder.encode(body.getPassword()));
         sites.save(site);
         return (HashMap) Map.of(
-                "registation", body.isRegistration(),
-                "country", body.getLogin(),
-                "city", body.getPassword()
+                "registration", body.isRegistration(),
+                "login", body.getLogin(),
+                "password", body.getPassword()
         );
     }
 
